@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+@* <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - testMVC</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/testMVC.styles.css" asp-append-version="true" />
+</head> *@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="css/fontawesome.css"> -->
+    <link rel="stylesheet" href="~/css/fontawesome.min.css">
+    <link rel="stylesheet" href="~/css/bootstrap.css">
+    <link rel="stylesheet" href="~/css/master.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/normalize.css">
+    <title>Desgin</title>
+</head>
+<body>
+    <!-- start settings box -->
+    <div class="setting-box">
+        <div class="toggle">
+            <i class="fa fa-gear im"></i>
+            @* <i class='fa fa-heart fa-5x'></i> *@
+        </div>
+        <div class="setting-container">
+            <div class="option-box">
+                <h4>Colors</h4>
+                <ul class="color-list">
+                    <li data-color="#D4AF37" style="background-color: #D4AF37;" title="الذهب الملكي (Royal Gold)"></li>
+                    <li class="active" data-color="#084641" style="background-color: #084641;" title="الزمرد الملكي الداكن "></li>
+                    <li data-color="#E91E63" style="background-color: #E91E63;" title="العقيق الياقوتي "></li>
+                    <li data-color="#009688" style="background-color: #009688;" title="الزمرد الأخضر "></li>
+                    <li data-color="#03A9F4" style="background-color: #03A9F4;" title=""></li>
+                    <li data-color="#4CAF50" style="background-color: #4CAF50;" title=""></li>
+                    <li data-color="#3355ff" style="background-color: #3355ff;" title=""></li>
+                    <li data-color="#781C26" style="background-color: #781C26;" title="البورغندي الملكي (Royal Burgundy)"></li>
+                    <li data-color="#3dcc5f" style="background-color: #3dcc5f;" title=""></li>
+                    <li data-color="#c0fc1f" style="background-color: #c0fc1f;" title=""></li>
+                    <li data-color="#3dccee" style="background-color: #3dccee;" title=""></li>
+                    <li data-color="#20bf40" style="background-color: #20bf40;" title=""></li>
+                    <li data-color="#Ac0f55" style="background-color: #Ac0f55;" title=""></li>
+                </ul>
+            </div>
+            <div class="option-box">
+                <h4>Ramdom Backgroungs</h4>
+                <div class="random-backgrounds">
+                    <span class="yes active" data-background="yes">Yes</span>
+                    <span class="no" data-background="no">No</span>
+                </div>
+            </div>
+           
+            <button class="reset-options">Reset Options</button>
+        </div>
+    </div>
+    <!-- end settings box -->
+    <!-- start landing page -->
+    <div class="landing-page">
+        <div class="overlay"></div>
+        <div class="container">
+
+            
+
+        </div>
+
+        <div class="introduction-text">
+            <h1>We Are ASP.NET Core <span>Devolopers</span> In Fact</h1>
+            <p>لا تنسى !</p>
+        </div>
+    </div>
+    <br />
+    <!-- end landing page -->
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+ 
+    <footer class="border-top footer text-muted">
+        
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/master.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

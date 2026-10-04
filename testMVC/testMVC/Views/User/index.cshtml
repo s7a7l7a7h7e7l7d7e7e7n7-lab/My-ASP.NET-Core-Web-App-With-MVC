@@ -1,0 +1,1409 @@
+@using testMVC.Models
+@model IEnumerable<User>
+
+@{
+    ViewData["Title"] = "الديوان الملكي الفاخر | إدارة المستخدمين";
+}
+
+<!-- استيراد خطوط ملكية عالمية (Amiri & Cinzel & Cairo) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@400;500;600;700;800;900&family=Cinzel:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+<div class="royal-page-wrapper" id="royalPageWrapper" dir="rtl">
+    
+    <!-- خلفيات الإضاءة الهيدروليكية الفاخرة المربوطة بلون صندوق الإعدادات -->
+    <div class="royal-light-sphere sphere-1"></div>
+    <div class="royal-light-sphere sphere-2"></div>
+    <div class="royal-light-sphere sphere-3"></div>
+
+    <div class="container py-5 position-relative">
+
+        <!-- تنبيهات النظام الملكية الفاخرة (Flash Alerts) -->
+        @if (TempData["Success"] != null)
+        {
+            <div class="royal-alert royal-alert-success mb-4 d-flex align-items-center justify-content-between fade show" role="alert">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="royal-alert-badge">
+                        <svg class="royal-svg-mini" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+                    <div>
+                        <strong class="d-block royal-alert-title">مرسوم إداري: تمت العملية بنجاح</strong>
+                        <span class="royal-alert-desc">@TempData["Success"]</span>
+                    </div>
+                </div>
+                <button type="button" class="btn-close-royal" onclick="this.parentElement.remove();">✕</button>
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="royal-alert royal-alert-danger mb-4 d-flex align-items-center justify-content-between fade show" role="alert">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="royal-alert-badge danger">
+                        <svg class="royal-svg-mini" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                    </div>
+                    <div>
+                        <strong class="d-block royal-alert-title">تنبيه ملكي</strong>
+                        <span class="royal-alert-desc">@TempData["Error"]</span>
+                    </div>
+                </div>
+                <button type="button" class="btn-close-royal" onclick="this.parentElement.remove();">✕</button>
+            </div>
+        }
+
+        <!-- شريط الربط المباشر مع صندوق الإعدادات (Setting-Box Live Color Sync Bar) -->
+        <div class="setting-sync-banner mb-4 p-3 rounded-4 d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="active-color-preview-ring" id="activeColorRing">
+                    <span class="active-color-preview-core" id="activeColorCore"></span>
+                </div>
+                <div>
+                    @* <span class="setting-sync-title d-block">طابع الألوان الملكي الفاخر المتزامن مع (Setting Box):</span> *@
+                    <small class="setting-sync-subtitle" id="currentColorLabel">يتم استمداد الفخامة والتأثيرات الضوئية مباشرة من اللون المختار في القائمة الجانبية</small>
+                </div>
+            </div>
+
+            <!-- زر فتح صندوق الإعدادات الجانبي مباشرة -->
+            <button type="button" class="btn-open-setting-box" onclick="toggleSettingBox();" title="فتح قائمة الألوان لتغيير اللون">
+                <span class="gear-animated">⚙️</span>
+                <span>تغيير اللون عبر Setting Box</span>
+                <span class="arrow-indicator">←</span>
+            </button>
+        </div>
+
+        <!-- ترويسة الصرح الملكي الكبير (The Grand Imperial Header) -->
+        <header class="royal-grand-header p-4 p-md-5 mb-5 rounded-5">
+            <div class="row align-items-center gy-4">
+                
+                <div class="col-lg-7">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="royal-crest-emblem">
+                            <!-- أيقونة التاج الإمبراطوري المتوجه بذهب مصقول -->
+                            <svg class="royal-svg-crown" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M3 18h18M4 18l2-10 5 6 5-6 2 10H4zM4 18l-1 2.5h18l-1-2.5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="6" cy="8" r="1.2" fill="currentColor"/>
+                                <circle cx="12" cy="4.8" r="1.5" fill="currentColor"/>
+                                <circle cx="18" cy="8" r="1.2" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <span class="royal-status-crest">الديوان الملكي المعتمد • </span>
+                    </div>
+
+                    <h1 class="royal-main-title mb-2">سِجِلّ العُضويّات الفَاخِر</h1>
+                    <p class="royal-main-desc mb-0">
+                        نظام الإدارة العليا والتحكم المركزي بحسابات المستخدمين، تتناغم ديناميكياً مع خيارات الألوان في صندوق الإعدادات.
+                    </p>
+                </div>
+
+                <!-- زر إضافة عضو ملكي جديد -->
+                <div class="col-lg-5 text-lg-start">
+                    <div class="d-flex flex-column flex-sm-row justify-content-lg-end align-items-center gap-3">
+                        <a asp-controller="User" asp-action="Create" class="btn btn-imperial-action w-100 w-sm-auto">
+                            <span class="btn-crest-icon">
+                                <svg class="royal-svg-mini" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </span>
+                            <span>إضافة مستخدم جديد</span>
+                            <span class="btn-royal-arrow">←</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- بطاقات الإحصاءات الإمبراطورية -->
+            <div class="royal-kpi-bar mt-4 pt-4 border-royal-kpi">
+                <div class="row g-3 text-center">
+                    <div class="col-12">
+                        <div class="kpi-box">
+                            <span class="kpi-number" id="totalUsersCount">@(Model != null ? Model.Count() : 0)</span>
+                            <span class="kpi-label">إجمالي الأعضاء المعتمدين</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- شريط الفرز والبحث الملكي الفاخر -->
+        <div class="royal-control-dock p-3 mb-4 rounded-4 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+            
+            <!-- حقل البحث الفوري المذهب -->
+            <div class="royal-input-wrapper flex-grow-1 w-100">
+                <svg class="royal-search-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="royalSearchInput" class="royal-dock-input" placeholder="ابحث في السجل بالاسم، البريد الإلكتروني، أو المعرف..." onkeyup="filterRoyalUsers()" />
+                <button type="button" class="dock-clear-btn" id="clearSearchBtn" onclick="clearRoyalSearch()" style="display: none;">✕</button>
+            </div>
+
+            <!-- محول نمط العرض وعداد النتائج -->
+            <div class="d-flex align-items-center justify-content-between w-100 w-md-auto gap-3">
+                <div class="royal-results-pill">
+                    <span class="results-text">الأعضاء المعروضون:</span>
+                    <strong id="filteredCount" class="results-num">@(Model != null ? Model.Count() : 0)</strong>
+                </div>
+
+                <div class="view-switch-dock btn-group" role="group">
+                    <button type="button" class="btn-switch-pill active" id="viewCardsBtn" onclick="switchRoyalView('cards')" title="عرض البطاقات">
+                        <svg class="switch-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                        <span class="d-none d-sm-inline">البطاقات</span>
+                    </button>
+                    <button type="button" class="btn-switch-pill" id="viewTableBtn" onclick="switchRoyalView('table')" title="عرض السجل والجدول">
+                        <svg class="switch-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="8" y1="6" x2="21" y2="6"></line>
+                            <line x1="8" y1="12" x2="21" y2="12"></line>
+                            <line x1="8" y1="18" x2="21" y2="18"></line>
+                            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                        </svg>
+                        <span class="d-none d-sm-inline">السجل</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        @if (Model == null || !Model.Any())
+        {
+            <!-- حالة خلو السجل الملكي (Empty State) -->
+            <div class="royal-empty-palace text-center p-5 rounded-5 my-5">
+                <div class="empty-crest-shield mb-3">
+                    <svg class="royal-svg-crest-large" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        <circle cx="12" cy="11" r="3"></circle>
+                    </svg>
+                </div>
+                <h3 class="empty-palace-title mb-2">السجل بانتظار قيد الأعضاء</h3>
+                <p class="empty-palace-subtitle mb-4">لا توجد حسابات مسجلة في النظام حتى الآن. يمكنك تعبئة السجل عبر إضافة أول عضو.</p>
+                <a asp-controller="User" asp-action="Create" class="btn btn-imperial-action px-5 py-3">
+                    <span>تعبئة السجل الآن</span>
+                </a>
+            </div>
+        }
+        else
+        {
+            <!-- ================= نمط العرض الأول: بطاقات النخبة الملكية (Imperial Cards Grid) ================= -->
+            <div id="royalCardsContainer" class="p-5 royal-cards-container">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="cardsGrid">
+                    @foreach (var user in Model)
+                    {
+                        <div class="col royal-user-item" data-search="@user.userName.ToLower() @user.Email.ToLower() @user.Id">
+                            <div class="imperial-card h-100 rounded-4 overflow-hidden position-relative d-flex flex-column">
+                                
+                                <!-- زخارف الزوايا الملكية الرفيعة الملونة بلون الطابع -->
+                                <div class="gold-corner-filigree top-right-corner"></div>
+                                <div class="gold-corner-filigree top-left-corner"></div>
+
+                                <!-- ترويسة البطاقة العلوية -->
+                                <div class="card-imperial-header d-flex justify-content-between align-items-center p-4 pb-0">
+                                    <div class="royal-seal-stamp">
+                                        @* <span class="seal-prefix">ID</span>
+                                        <span class="seal-val">#@user.Id.ToString("D3")</span> *@
+                                    </div>
+                                    <div class="royal-privilege-tag">
+                                        <span class="privilege-gem-glow"></span>
+                                        <span>عضوية معتمدة</span>
+                                    </div>
+                                </div>
+
+                                <!-- جسم البطاقة -->
+                                <div class="card-imperial-body p-4 pt-3 flex-grow-1 text-center">
+                                    
+                                    <!-- الهالة والشعار الملكي للرمز الشخصي (Monogram Frame) -->
+                                    <div class="avatar-monogram-wrapper position-relative d-inline-block mb-3">
+                                        <div class="monogram-outer-ring">
+                                            <div class="monogram-inner-core">
+                                                @(string.IsNullOrEmpty(user.userName) ? "U" : user.userName.Substring(0, 1).ToUpper())
+                                            </div>
+                                        </div>
+                                        <div class="monogram-crown-pendant">
+                                            <svg class="royal-svg-mini" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M3 18h18M4 18l2-10 5 6 5-6 2 10H4z"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+
+                                    <!-- اسم العضو الملكي -->
+                                    <h4 class="member-royal-name mb-1 text-truncate" title="@user.userName">@user.userName</h4>
+                                    <span class="member-royal-tier mb-3 d-inline-block">عضو في الديوان الملكي</span>
+
+                                    <!-- لوحة بيانات العضو المصفحة -->
+                                    <div class="member-credentials-dock p-3 rounded-3 mb-3 text-start">
+                                        <!-- البريد الإلكتروني -->
+                                        <div class="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom border-dock-divider">
+                                            <span class="cred-label">
+                                                <svg class="cred-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                                </svg>
+                                                <span>البريد:</span>
+                                            </span>
+                                            <span class="cred-value text-truncate ms-2" dir="ltr" title="@user.Email">@user.Email</span>
+                                        </div>
+
+                                        <!-- الأمان والتشفير -->
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <span class="cred-label">
+                                                <svg class="cred-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                                </svg>
+                                                <span>الحماية:</span>
+                                            </span>
+                                            <span class="cred-shield-badge">حساب مؤمن</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <!-- أزرار العمليات الملكية (Edit & Delete) -->
+                                <div class="card-imperial-footer p-3 px-4 border-imperial-top mt-auto">
+                                    <div class="d-flex gap-2">
+                                        <!-- زر التعديل الموشح بلون الطابع -->
+                                        <a asp-controller="User" asp-action="Edit" asp-route-id="@user.Id" class="btn-royal-action btn-action-edit flex-fill" title="تعديل بيانات العضو">
+                                            <svg class="action-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                                            </svg>
+                                            <span>تعديل</span>
+                                        </a>
+
+                                        <!-- زر الحذف البورغندي المخملي -->
+                                        <a asp-controller="User" asp-action="Delete" asp-route-id="@user.Id" class="btn-royal-action btn-action-delete flex-fill" title="حذف الحساب من السجل">
+                                            <svg class="action-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <polyline points="3 6 5 6 21 6"></polyline>
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                            </svg>
+                                            <span>حذف</span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- ================= نمط العرض الثاني: السجل الملكي التفاعلي (The Imperial Ledger Table) ================= -->
+            <div id="royalTableContainer" class="royal-ledger-container rounded-4 overflow-hidden shadow-2xl" style="display: none;">
+                <div class="table-responsive">
+                    <table class="table imperial-table mb-0 align-middle">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="width: 100px;">المعرف</th>
+                                <th>العضو</th>
+                                <th>البريد الإلكتروني المعتمد</th>
+                                <th class="text-center">حالة السجل</th>
+                                <th class="text-center" style="width: 220px;">العمليات المعتمدة</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody" class="p-3">
+                            @foreach (var user in Model)
+                            {
+                                <tr class="imperial-table-row royal-user-item-table" data-search="@user.userName.ToLower() @user.Email.ToLower() @user.Id">
+                                    <td class="text-center">
+                                        <span class="ledger-id-badge">#@user.Id.ToString("D3")</span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="ledger-avatar-mini">
+                                                @(string.IsNullOrEmpty(user.userName) ? "U" : user.userName.Substring(0, 1).ToUpper())
+                                            </div>
+                                            <div>
+                                                <div class="ledger-member-name">@user.userName</div>
+                                                <small class="ledger-member-sub">عضو معتمد</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ledger-email-text" dir="ltr">@user.Email</div>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="ledger-status-tag">
+                                            <span class="status-pulse-dot"></span> موثق ونشط
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-inline-flex gap-2">
+                                            <a asp-controller="User" asp-action="Edit" asp-route-id="@user.Id" class="btn-ledger-action edit" title="تعديل">
+                                                <svg class="action-svg-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                                                </svg>
+                                                <span>تعديل</span>
+                                            </a>
+                                            <a asp-controller="User" asp-action="Delete" asp-route-id="@user.Id" class="btn-ledger-action delete" title="حذف">
+                                                <svg class="action-svg-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                </svg>
+                                                <span>حذف</span>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- شاشة عدم العثور على نتائج للبحث -->
+            <div id="noSearchResults" class="royal-no-search-box text-center p-5 rounded-5 my-4" style="display: none;">
+                <div class="search-empty-icon mb-3">
+                    <svg class="royal-svg-crest-large" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </div>
+                <h4 class="empty-palace-title mb-1">لم يتم العثور على أي نتائج مطابقة</h4>
+                <p class="empty-palace-subtitle mb-4">يرجى التأكد من كتابة الاسم أو البريد الإلكتروني أو المعرّف بشكل صحيح.</p>
+                <button type="button" class="btn btn-imperial-outline" onclick="clearRoyalSearch()">
+                    إعادة ضبط معايير البحث
+                </button>
+            </div>
+        }
+
+    </div>
+</div>
+
+<!-- ================= التنسيقات الملكية الديناميكية المربوطة بـ --main--color ================= -->
+<style>
+    /* المتغير الديناميكي الأساسي المستمد مباشرة من Setting-Box */
+    :root {
+        --main--color: #084641;
+    }
+
+    .royal-page-wrapper {
+        font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+        
+        /* المتغير الأساسي للطابع الملكي */
+        --theme-color: var(--main--color, #084641);
+
+        /* الخلفية الفخمة: أسود مخملي مطعم بنسبة رقيقة من اللون المختار */
+        background: radial-gradient(circle at 50% 6%, color-mix(in srgb, var(--theme-color) 12%, #0A0D14) 0%, #06080B 75%);
+        color: #FAF8F2;
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+        margin-top: -20px;
+        padding-top: 25px;
+        transition: background 0.45s ease, color 0.35s ease;
+
+        /* المتغيرات المشتقة ديناميكياً */
+        --theme-light: color-mix(in srgb, var(--theme-color) 85%, #FFFFFF);
+        --theme-glow: color-mix(in srgb, var(--theme-color) 32%, transparent);
+        --theme-border: color-mix(in srgb, var(--theme-color) 42%, transparent);
+        --theme-border-subtle: color-mix(in srgb, var(--theme-color) 18%, transparent);
+        --theme-badge-bg: color-mix(in srgb, var(--theme-color) 14%, transparent);
+        --theme-card-bg: linear-gradient(
+            165deg, 
+            color-mix(in srgb, var(--theme-color) 14%, rgba(20, 26, 38, 0.94)) 0%, 
+            color-mix(in srgb, var(--theme-color) 4%, rgba(8, 11, 17, 0.98)) 100%
+        );
+        --theme-card-inner: color-mix(in srgb, var(--theme-color) 8%, #090C12);
+        --theme-metallic: linear-gradient(
+            135deg, 
+            #FFF8EB 0%, 
+            color-mix(in srgb, var(--theme-color) 82%, #FFFFFF) 30%, 
+            var(--theme-color) 60%, 
+            color-mix(in srgb, var(--theme-color) 65%, #000000) 100%
+        );
+    }
+
+    /* هالات الإضاءة المحيطة المهدئة */
+    .royal-light-sphere {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(140px);
+        pointer-events: none;
+        z-index: 0;
+        transition: background 0.5s ease;
+    }
+    .sphere-1 {
+        width: 500px;
+        height: 500px;
+        top: -80px;
+        right: -80px;
+        background: radial-gradient(circle, var(--theme-glow) 0%, transparent 70%);
+    }
+    .sphere-2 {
+        width: 480px;
+        height: 480px;
+        bottom: 80px;
+        left: -100px;
+        background: radial-gradient(circle, color-mix(in srgb, var(--theme-color) 20%, transparent) 0%, transparent 70%);
+    }
+    .sphere-3 {
+        width: 350px;
+        height: 350px;
+        top: 45%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(circle, var(--theme-glow) 0%, transparent 75%);
+        opacity: 0.18;
+    }
+
+    /* ================= شريط الربط المباشر مع صندوق الإعدادات ================= */
+    .setting-sync-banner {
+        background: rgba(14, 18, 26, 0.88);
+        border: 1px solid var(--theme-border-subtle);
+        backdrop-filter: blur(15px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        transition: border-color 0.3s ease;
+    }
+    .active-color-preview-ring {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        padding: 3px;
+        background: var(--theme-metallic);
+        box-shadow: 0 0 15px var(--theme-glow);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+    .active-color-preview-core {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background-color: var(--theme-color);
+        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.6);
+        transition: background-color 0.3s ease;
+    }
+    .setting-sync-title {
+        font-size: 0.9rem;
+        font-weight: 800;
+        color: var(--theme-light);
+    }
+    .setting-sync-subtitle {
+        color: #94A3B8;
+        font-size: 0.78rem;
+    }
+    .btn-open-setting-box {
+        background: var(--theme-badge-bg);
+        border: 1px solid var(--theme-border);
+        color: var(--theme-light);
+        padding: 8px 18px;
+        border-radius: 50px;
+        font-size: 0.84rem;
+        font-weight: 700;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.25s ease;
+    }
+    .btn-open-setting-box:hover {
+        background: var(--theme-metallic);
+        color: #07090D;
+        box-shadow: 0 4px 15px var(--theme-glow);
+        transform: translateY(-1px);
+    }
+    .gear-animated {
+        font-size: 1.05rem;
+    }
+    .arrow-indicator {
+        font-size: 1.1rem;
+        transition: transform 0.2s ease;
+    }
+    .btn-open-setting-box:hover .arrow-indicator {
+        transform: translateX(-4px);
+    }
+
+    /* ================= ترويسة الصرح الملكي (Grand Header) ================= */
+    .royal-grand-header {
+        background: var(--theme-card-bg);
+        border: 1px solid var(--theme-border);
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75), 0 0 30px var(--theme-glow);
+        backdrop-filter: blur(20px);
+        position: relative;
+        transition: border-color 0.4s ease, box-shadow 0.4s ease;
+    }
+    .royal-grand-header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 12%;
+        right: 12%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--theme-color), #FFF, var(--theme-color), transparent);
+        border-radius: 2px;
+        box-shadow: 0 0 15px var(--theme-color);
+    }
+
+    .royal-crest-emblem {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        background: var(--theme-metallic);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 6px 20px var(--theme-glow);
+        color: #07090D;
+        transition: all 0.35s ease;
+    }
+    .royal-svg-crown {
+        width: 26px;
+        height: 26px;
+        stroke: #07090D;
+    }
+
+    .royal-status-crest {
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        color: var(--theme-light);
+        background: var(--theme-badge-bg);
+        padding: 4px 16px;
+        border-radius: 50px;
+        border: 1px solid var(--theme-border);
+    }
+
+    .royal-main-title {
+        font-family: 'Amiri', 'Cinzel', serif;
+        font-weight: 700;
+        font-size: 2.3rem;
+        background: linear-gradient(135deg, #FFFFFF 0%, var(--theme-light) 35%, var(--theme-color) 70%, color-mix(in srgb, var(--theme-color) 60%, #000) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        line-height: 1.3;
+    }
+
+    .royal-main-desc {
+        color: #8E9BAE;
+        font-size: 0.95rem;
+        line-height: 1.7;
+        max-width: 650px;
+    }
+
+    /* زر الإضافة الملكي المتقن المربوط بالطابع */
+    .btn-imperial-action {
+        background: var(--theme-metallic);
+        color: #07090D !important;
+        font-weight: 800;
+        font-size: 0.98rem;
+        padding: 13px 30px;
+        border-radius: 50px;
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        text-decoration: none;
+        box-shadow: 0 10px 30px var(--theme-glow);
+        transition: all 0.35s cubic-bezier(0.3, 0.8, 0.3, 1);
+        position: relative;
+        overflow: hidden;
+    }
+    .btn-imperial-action::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        transition: all 0.6s ease;
+    }
+    .btn-imperial-action:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 15px 40px var(--theme-glow);
+        color: #000 !important;
+    }
+    .btn-imperial-action:hover::after {
+        left: 100%;
+    }
+    .btn-royal-arrow {
+        font-size: 1.15rem;
+        transition: transform 0.25s ease;
+    }
+    .btn-imperial-action:hover .btn-royal-arrow {
+        transform: translateX(-5px);
+    }
+    .btn-crest-icon {
+        display: flex;
+        align-items: center;
+    }
+    .royal-svg-mini {
+        width: 18px;
+        height: 18px;
+    }
+
+    /* إحصاءات الترويسة الفاخرة */
+    .border-royal-kpi {
+        border-top: 1px solid var(--theme-border-subtle);
+    }
+    .border-royal-kpi-line {
+        border-color: var(--theme-border-subtle) !important;
+    }
+    .kpi-number {
+        display: block;
+        font-size: 1.8rem;
+        font-weight: 800;
+        font-family: 'Cinzel', 'Cairo', serif;
+        color: var(--theme-light);
+        line-height: 1.2;
+    }
+    .text-accent-highlight {
+        color: var(--theme-color) !important;
+    }
+    .text-status-active {
+        color: #34D399 !important;
+        font-size: 1.35rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+    .kpi-live-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #10B981;
+        box-shadow: 0 0 10px #10B981;
+    }
+    .kpi-label {
+        font-size: 0.8rem;
+        color: #8E9BAE;
+        font-weight: 600;
+    }
+
+    /* ================= شريط البحث والتحكم الملكي ================= */
+    .royal-control-dock {
+        background: var(--theme-card-bg);
+        border: 1px solid var(--theme-border);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(16px);
+    }
+    .royal-input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+    .royal-search-svg {
+        position: absolute;
+        right: 18px;
+        width: 20px;
+        height: 20px;
+        color: var(--theme-color);
+        pointer-events: none;
+        opacity: 0.85;
+    }
+    .royal-dock-input {
+        width: 100%;
+        background: var(--theme-card-inner);
+        border: 1px solid var(--theme-border-subtle);
+        border-radius: 50px;
+        padding: 12px 50px 12px 45px;
+        color: #FAF8F2;
+        font-size: 0.94rem;
+        font-family: inherit;
+        transition: all 0.3s ease;
+    }
+    .royal-dock-input:focus {
+        outline: none;
+        border-color: var(--theme-color);
+        box-shadow: 0 0 18px var(--theme-glow);
+        background: rgba(14, 18, 26, 0.95);
+    }
+    .royal-dock-input::placeholder {
+        color: #8E9BAE;
+        opacity: 0.7;
+    }
+    .dock-clear-btn {
+        position: absolute;
+        left: 15px;
+        background: none;
+        border: none;
+        color: #8E9BAE;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+    .dock-clear-btn:hover {
+        color: var(--theme-light);
+    }
+
+    .royal-results-pill {
+        background: var(--theme-badge-bg);
+        border: 1px solid var(--theme-border-subtle);
+        color: var(--theme-light);
+        padding: 8px 18px;
+        border-radius: 50px;
+        font-size: 0.86rem;
+        white-space: nowrap;
+    }
+    .results-num {
+        color: #FFF;
+        font-weight: 800;
+        margin-right: 5px;
+    }
+
+    /* محول طريقة العرض */
+    .view-switch-dock {
+        background: var(--theme-card-inner);
+        padding: 4px;
+        border-radius: 50px;
+        border: 1px solid var(--theme-border-subtle);
+    }
+    .btn-switch-pill {
+        background: transparent;
+        border: none;
+        color: #8E9BAE;
+        padding: 7px 16px;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+    .btn-switch-pill.active {
+        background: var(--theme-metallic);
+        color: #07090D;
+        box-shadow: 0 3px 12px var(--theme-glow);
+    }
+    .btn-switch-pill:not(.active):hover {
+        color: var(--theme-light);
+    }
+    .switch-icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    /* ================= بطاقة النخبة الملكية (Imperial Card) ================= */
+    .imperial-card {
+        background: var(--theme-card-bg);
+        border: 1px solid var(--theme-border);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.08);
+        transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+        backdrop-filter: blur(16px);
+    }
+    .imperial-card:hover {
+        transform: translateY(-8px);
+        border-color: var(--theme-color);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.85), 0 0 25px var(--theme-glow);
+    }
+
+    /* زخرفة زوايا البطاقة المعدنية الملونة */
+    .gold-corner-filigree {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        pointer-events: none;
+        opacity: 0.75;
+    }
+    .top-right-corner {
+        top: 8px;
+        right: 8px;
+        border-top: 2px solid var(--theme-color);
+        border-right: 2px solid var(--theme-color);
+    }
+    .top-left-corner {
+        top: 8px;
+        left: 8px;
+        border-top: 2px solid var(--theme-color);
+        border-left: 2px solid var(--theme-color);
+    }
+
+    /* ختم المعرف الملكي */
+    .royal-seal-stamp {
+        font-family: 'Cinzel', monospace;
+        font-weight: 800;
+        font-size: 0.94rem;
+        color: var(--theme-light);
+        background: var(--theme-badge-bg);
+        padding: 4px 12px;
+        border-radius: 8px;
+        border: 1px solid var(--theme-border-subtle);
+    }
+    .seal-prefix {
+        font-size: 0.75rem;
+        opacity: 0.7;
+        margin-left: 3px;
+        color: var(--theme-color);
+    }
+
+    .royal-privilege-tag {
+        font-size: 0.76rem;
+        font-weight: 700;
+        color: #A7F3D0;
+        background: rgba(16, 185, 129, 0.12);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        padding: 3px 12px;
+        border-radius: 50px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .privilege-gem-glow {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: #10B981;
+        box-shadow: 0 0 8px #10B981;
+    }
+
+    /* إطار الصورة الرمزية الملكية الموشحة بالطابع */
+    .monogram-outer-ring {
+        width: 82px;
+        height: 82px;
+        border-radius: 50%;
+        padding: 3px;
+        background: var(--theme-metallic);
+        box-shadow: 0 0 25px var(--theme-glow);
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .monogram-inner-core {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 35%, #1C2333 0%, var(--theme-card-inner) 100%);
+        color: var(--theme-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Amiri', 'Cinzel', serif;
+        font-size: 2rem;
+        font-weight: 700;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+    }
+    .monogram-crown-pendant {
+        position: absolute;
+        top: -10px;
+        right: 18px;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: var(--theme-metallic);
+        color: #07090D;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .member-royal-name {
+        font-weight: 800;
+        font-size: 1.25rem;
+        color: #FAF8F2;
+        margin-top: 8px;
+    }
+    .member-royal-tier {
+        font-size: 0.82rem;
+        color: var(--theme-color);
+        font-weight: 700;
+    }
+
+    /* لوحة بيانات الحساب المصفحة */
+    .member-credentials-dock {
+        background: var(--theme-card-inner);
+        border: 1px solid var(--theme-border-subtle);
+    }
+    .border-dock-divider {
+        border-color: var(--theme-border-subtle) !important;
+    }
+    .cred-label {
+        font-size: 0.82rem;
+        color: #8E9BAE;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .cred-svg {
+        width: 15px;
+        height: 15px;
+        color: var(--theme-color);
+    }
+    .cred-value {
+        font-size: 0.86rem;
+        color: var(--theme-light);
+        font-family: 'Segoe UI', monospace;
+    }
+    .cred-shield-badge {
+        font-size: 0.75rem;
+        color: var(--theme-light);
+        background: var(--theme-badge-bg);
+        padding: 3px 10px;
+        border-radius: 6px;
+        font-weight: 600;
+        border: 1px solid var(--theme-border-subtle);
+    }
+
+    .border-imperial-top {
+        border-top: 1px solid var(--theme-border-subtle) !important;
+    }
+    .card-imperial-footer {
+        background: rgba(8, 11, 17, 0.85);
+    }
+
+    /* أزرار العمليات الإمبراطورية */
+    .btn-royal-action {
+        border-radius: 10px;
+        padding: 9px 12px;
+        font-size: 0.88rem;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all 0.25s ease;
+    }
+    .action-svg {
+        width: 17px;
+        height: 17px;
+    }
+    .btn-action-edit {
+        background: var(--theme-badge-bg);
+        color: var(--theme-light);
+        border: 1px solid var(--theme-border);
+    }
+    .btn-action-edit:hover {
+        background: var(--theme-metallic);
+        color: #07090D;
+        border-color: transparent;
+        box-shadow: 0 4px 15px var(--theme-glow);
+    }
+    .btn-action-delete {
+        background: rgba(120, 28, 38, 0.22);
+        color: #F87171;
+        border: 1px solid rgba(220, 38, 38, 0.35);
+    }
+    .btn-action-delete:hover {
+        background: linear-gradient(135deg, #781c26 0%, #4a0d14 100%);
+        color: #FFF;
+        border-color: transparent;
+        box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+    }
+
+    /* ================= السجل والجدول الملكي (Imperial Table) ================= */
+    .royal-ledger-container {
+        background: var(--theme-card-bg);
+        border: 1px solid var(--theme-border);
+        backdrop-filter: blur(20px);
+    }
+    .imperial-table {
+        --bs-table-bg: transparent;
+        --bs-table-color: #FAF8F2;
+    }
+    .imperial-table thead {
+        background: var(--theme-card-inner);
+        border-bottom: 2px solid var(--theme-color);
+    }
+    .imperial-table thead th {
+        color: var(--theme-light);
+        font-weight: 800;
+        font-size: 0.92rem;
+        padding: 18px 22px;
+        border-bottom: 1px solid var(--theme-border-subtle);
+        letter-spacing: 0.5px;
+    }
+    .imperial-table tbody tr {
+        border-bottom: 1px solid var(--theme-border-subtle);
+        transition: background-color 0.2s ease;
+    }
+    .imperial-table tbody tr:hover {
+        background-color: var(--theme-badge-bg);
+    }
+    .imperial-table td {
+        padding: 16px 22px;
+    }
+    .ledger-id-badge {
+        font-family: 'Cinzel', monospace;
+        font-weight: 800;
+        color: var(--theme-light);
+        background: var(--theme-badge-bg);
+        padding: 4px 10px;
+        border-radius: 6px;
+        border: 1px solid var(--theme-border-subtle);
+    }
+    .ledger-avatar-mini {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: var(--theme-metallic);
+        color: #07090D;
+        font-weight: 900;
+        font-size: 1.15rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+    }
+    .ledger-member-name {
+        font-weight: 700;
+        font-size: 1.02rem;
+        color: #FAF8F2;
+    }
+    .ledger-member-sub {
+        font-size: 0.75rem;
+        color: var(--theme-color);
+    }
+    .ledger-email-text {
+        font-family: monospace;
+        color: var(--theme-light);
+        font-size: 0.92rem;
+    }
+    .ledger-status-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.8rem;
+        color: #6EE7B7;
+        background: rgba(16, 185, 129, 0.12);
+        border: 1px solid rgba(16, 185, 129, 0.28);
+        padding: 4px 14px;
+        border-radius: 50px;
+    }
+    .status-pulse-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background-color: #10B981;
+        box-shadow: 0 0 8px #10B981;
+    }
+
+    .btn-ledger-action {
+        border-radius: 8px;
+        padding: 6px 14px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s ease;
+    }
+    .action-svg-sm {
+        width: 14px;
+        height: 14px;
+    }
+    .btn-ledger-action.edit {
+        background: var(--theme-badge-bg);
+        color: var(--theme-light);
+        border: 1px solid var(--theme-border);
+    }
+    .btn-ledger-action.edit:hover {
+        background: var(--theme-metallic);
+        color: #07090D;
+    }
+    .btn-ledger-action.delete {
+        background: rgba(120, 28, 38, 0.22);
+        color: #F87171;
+        border: 1px solid rgba(220, 38, 38, 0.35);
+    }
+    .btn-ledger-action.delete:hover {
+        background: linear-gradient(135deg, #781c26 0%, #4a0d14 100%);
+        color: #FFF;
+    }
+
+    /* ================= التنبيهات الملكية (Alerts) ================= */
+    .royal-alert {
+        padding: 16px 24px;
+        border-radius: 16px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    }
+    .royal-alert-success {
+        background: rgba(16, 185, 129, 0.12);
+        border: 1px solid rgba(16, 185, 129, 0.35);
+        color: #A7F3D0;
+    }
+    .royal-alert-danger {
+        background: rgba(220, 38, 38, 0.12);
+        border: 1px solid rgba(220, 38, 38, 0.35);
+        color: #FCA5A5;
+    }
+    .royal-alert-badge {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: rgba(16, 185, 129, 0.2);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .royal-alert-badge.danger {
+        background: rgba(220, 38, 38, 0.2);
+        border: 1px solid rgba(220, 38, 38, 0.4);
+    }
+    .royal-alert-title {
+        font-size: 0.95rem;
+        font-weight: 800;
+    }
+    .royal-alert-desc {
+        font-size: 0.85rem;
+        opacity: 0.9;
+    }
+    .btn-close-royal {
+        background: none;
+        border: none;
+        color: inherit;
+        font-size: 1.15rem;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+    }
+    .btn-close-royal:hover {
+        opacity: 1;
+    }
+
+    /* ================= حالة الفراغ والبحث ================= */
+    .royal-empty-palace, .royal-no-search-box {
+        background: var(--theme-card-bg);
+        border: 2px dashed var(--theme-border);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    .royal-svg-crest-large {
+        width: 60px;
+        height: 60px;
+        color: var(--theme-color);
+        filter: drop-shadow(0 0 15px var(--theme-glow));
+    }
+    .empty-palace-title {
+        font-weight: 800;
+        color: var(--theme-light);
+    }
+    .empty-palace-subtitle {
+        color: #8E9BAE;
+        max-width: 480px;
+        margin: 0 auto;
+        font-size: 0.92rem;
+    }
+    .btn-imperial-outline {
+        background: transparent;
+        color: var(--theme-light);
+        border: 1px solid var(--theme-color);
+        padding: 9px 26px;
+        border-radius: 50px;
+        font-weight: 700;
+        transition: all 0.25s ease;
+    }
+    .btn-imperial-outline:hover {
+        background: var(--theme-metallic);
+        color: #07090D;
+    }
+
+    /* تجاوب الشاشات الصغيرة */
+    @@media (max-width: 768px) {
+        .royal-main-title {
+            font-size: 1.75rem;
+        }
+        .royal-grand-header {
+            padding: 1.6rem !important;
+        }
+    }
+</style>
+
+<!-- ================= سكريبت التفاعل والمزامنة مع صندوق الإعدادات ================= -->
+<script>
+    // دالة فتح/إغلاق صندوق الإعدادات الجانبي مباشرة
+    function toggleSettingBox() {
+        const toggleIcon = document.querySelector(".setting-box .toggle .fa-gear");
+        if (toggleIcon) {
+            toggleIcon.click();
+        } else {
+            const settingBox = document.querySelector(".setting-box");
+            if (settingBox) settingBox.classList.toggle("open");
+        }
+    }
+
+    // أسماء الألوان باللغة العربية لعرضها في الشريط
+    const colorNamesMap = {
+        '#d4af37': 'الذهب الملكي الصافي (Imperial Gold)',
+        '#084641': 'الزمرد الملكي الداكن (Royal Teal)',
+        '#e91e63': 'العقيق الياقوتي (Imperial Ruby)',
+        '#009688': 'الزمرد الأخضر (Emerald Green)',
+        '#03a9f4': 'الألماس السماوي (Sky Diamond)',
+        '#4caf50': 'اليشم الإمبراطوري (Imperial Jade)',
+        '#3355ff': 'الياقوت الكحلي الملكي (Royal Sapphire)',
+        '#781c26': 'البورغندي المخملي (Velvet Burgundy)',
+        '#3dcc5f': 'الزبرجد الأخضر (Aquamarine Green)',
+        '#c0fc1f': 'الكهرمان الليموني (Lime Amber)',
+        '#3dccee': 'الفيروز الملكي (Royal Turquoise)',
+        '#20bf40': 'الزمرد المضيء (Luminous Emerald)'
+    };
+
+    // تطبيق اللون المختار في السجل الملكي وتحديث شريط المزامنة
+    function applyRoyalThemeColor(color) {
+        if (!color) return;
+        const normalized = color.trim().toLowerCase();
+        const wrapper = document.getElementById('royalPageWrapper');
+        if (wrapper) {
+            wrapper.style.setProperty('--main--color', normalized);
+        }
+
+        const core = document.getElementById('activeColorCore');
+        if (core) {
+            core.style.backgroundColor = normalized;
+        }
+
+        const label = document.getElementById('currentColorLabel');
+        if (label) {
+            const name = colorNamesMap[normalized] || normalized.toUpperCase();
+            label.innerHTML = `اللون الملكي الفعّال حالياً: <strong style="color: ${normalized};">${name}</strong>`;
+        }
+    }
+
+    // التبديل بين نمط عرض البطاقات والجدول
+    function switchRoyalView(viewMode) {
+        const cardsContainer = document.getElementById('royalCardsContainer');
+        const tableContainer = document.getElementById('royalTableContainer');
+        const viewCardsBtn = document.getElementById('viewCardsBtn');
+        const viewTableBtn = document.getElementById('viewTableBtn');
+
+        if (viewMode === 'cards') {
+            if (cardsContainer) cardsContainer.style.display = 'block';
+            if (tableContainer) tableContainer.style.display = 'none';
+            viewCardsBtn.classList.add('active');
+            viewTableBtn.classList.remove('active');
+            localStorage.setItem('royal_view_mode', 'cards');
+        } else {
+            if (cardsContainer) cardsContainer.style.display = 'none';
+            if (tableContainer) tableContainer.style.display = 'block';
+            viewCardsBtn.classList.remove('active');
+            viewTableBtn.classList.add('active');
+            localStorage.setItem('royal_view_mode', 'table');
+        }
+    }
+
+    // البحث والتصفية الفورية اللحظية
+    function filterRoyalUsers() {
+        const input = document.getElementById('royalSearchInput');
+        const filter = input.value.trim().toLowerCase();
+        const clearBtn = document.getElementById('clearSearchBtn');
+        const cardItems = document.querySelectorAll('.royal-user-item');
+        const tableRows = document.querySelectorAll('.royal-user-item-table');
+        const counterEl = document.getElementById('filteredCount');
+        const noSearchEl = document.getElementById('noSearchResults');
+        const cardsGrid = document.getElementById('cardsGrid');
+        const tableContainer = document.getElementById('royalTableContainer');
+
+        if (filter.length > 0) {
+            clearBtn.style.display = 'inline-block';
+        } else {
+            clearBtn.style.display = 'none';
+        }
+
+        let visibleCount = 0;
+
+        // تصفية البطاقات
+        cardItems.forEach(item => {
+            const searchData = item.getAttribute('data-search') || '';
+            if (searchData.includes(filter)) {
+                item.style.display = '';
+                visibleCount++;
+            } else {
+                item.style.display = 'none';
+            }
+        });
+
+        // تصفية صفوف الجدول
+        tableRows.forEach(row => {
+            const searchData = row.getAttribute('data-search') || '';
+            if (searchData.includes(filter)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        // تحديث العداد
+        if (counterEl) {
+            counterEl.textContent = visibleCount;
+        }
+
+        // إظهار رسالة عدم العثور على نتائج
+        if (visibleCount === 0 && (cardItems.length > 0 || tableRows.length > 0)) {
+            if (noSearchEl) noSearchEl.style.display = 'block';
+            if (cardsGrid) cardsGrid.style.display = 'none';
+            if (tableContainer) tableContainer.style.display = 'none';
+        } else {
+            if (noSearchEl) noSearchEl.style.display = 'none';
+            if (cardsGrid) cardsGrid.style.display = '';
+            
+            // إعادة نمط العرض المحفوظ
+            const currentMode = localStorage.getItem('royal_view_mode') || 'cards';
+            if (currentMode === 'table') {
+                if (tableContainer) tableContainer.style.display = 'block';
+                if (document.getElementById('royalCardsContainer')) {
+                    document.getElementById('royalCardsContainer').style.display = 'none';
+                }
+            } else {
+                if (tableContainer) tableContainer.style.display = 'none';
+                if (document.getElementById('royalCardsContainer')) {
+                    document.getElementById('royalCardsContainer').style.display = 'block';
+                }
+            }
+        }
+    }
+
+    // مسح البحث
+    function clearRoyalSearch() {
+        const input = document.getElementById('royalSearchInput');
+        if (input) {
+            input.value = '';
+            filterRoyalUsers();
+            input.focus();
+        }
+    }
+
+    // مراقبة فورية لخيارات الألوان في setting-box
+    document.addEventListener('DOMContentLoaded', function () {
+        // 1. استعادة نمط العرض المفضل (بطاقات أو جدول)
+        const savedMode = localStorage.getItem('royal_view_mode') || 'cards';
+        switchRoyalView(savedMode);
+
+        // 2. قراءة اللون الأولي من LocalStorage أو CSS
+        const initialColor = localStorage.getItem("color_option") || 
+                             getComputedStyle(document.documentElement).getPropertyValue('--main--color').trim() || 
+                             '#084641';
+        applyRoyalThemeColor(initialColor);
+
+        // 3. الاستماع للنقر المباشر على أي لون في setting-box
+        const colorItems = document.querySelectorAll(".setting-box .color-list li");
+        colorItems.forEach(li => {
+            li.addEventListener("click", function () {
+                const pickedColor = this.dataset.color || this.getAttribute('data-color');
+                if (pickedColor) {
+                    applyRoyalThemeColor(pickedColor);
+                }
+            });
+        });
+
+        // 4. مراقب MutationObserver لضمان التحديث الفوري عند أي تغيير على :root
+        const observer = new MutationObserver(() => {
+            const dynamicColor = getComputedStyle(document.documentElement).getPropertyValue('--main--color').trim();
+            if (dynamicColor) {
+                applyRoyalThemeColor(dynamicColor);
+            }
+        });
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] });
+    });
+</script>
+</html>
